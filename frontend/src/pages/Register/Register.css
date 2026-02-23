@@ -1,0 +1,104 @@
+/* ---------- Page Container ---------- */
+.register-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f5f7fa, #e4e8ef);
+  padding: 20px;
+}
+
+/* ---------- Form Card ---------- */
+.registration-form {
+  width: 100%;
+  max-width: 420px;
+  background: #ffffff;
+  padding: 32px 28px;
+  border-radius: 14px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* ---------- Heading ---------- */
+.registration-form h2 {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #1f2937;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+/* ---------- Inputs ---------- */
+.registration-form input {
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 0.95rem;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.registration-form input::placeholder {
+  color: #9ca3af;
+}
+
+/* Focus state */
+.registration-form input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+/* ---------- Button ---------- */
+.registration-form button {
+  margin-top: 10px;
+  padding: 12px;
+  background: #2563eb;
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.registration-form button:hover {
+  background: #1e40af;
+  transform: translateY(-1px);
+}
+
+.registration-form button:active {
+  transform: translateY(0);
+}
+
+/* ---------- Footer Text ---------- */
+.already-registered {
+  margin-top: 10px;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #4b5563;
+}
+
+.already-registered a {
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.already-registered a:hover {
+  text-decoration: underline;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 480px) {
+  .registration-form {
+    padding: 24px 20px;
+  }
+
+  .registration-form h2 {
+    font-size: 1.4rem;
+  }
+}

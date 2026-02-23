@@ -1,0 +1,111 @@
+/* Page container */
+.get-started-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 24px;
+    background: linear-gradient(135deg, #f9fafb, #eef2ff);
+    font-family: "Inter", sans-serif;
+    text-align: center;
+}
+
+/* Heading */
+.get-started-container h2 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 32px;
+}
+
+/* Form card */
+.get-started-form {
+    width: 100%;
+    max-width: 420px;
+    background: #ffffff;
+    padding: 28px;
+    border-radius: 20px;
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.08);
+}
+
+/* Label */
+.get-started-form label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+/* City input */
+.city-input {
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 14px;
+    border: 1px solid #e5e7eb;
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.2s ease;
+    margin-bottom: 16px;
+}
+
+.city-input::placeholder {
+    color: #9ca3af;
+}
+
+/* Input focus */
+.city-input:focus {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+}
+
+/* Explore button */
+.explore-btn {
+    width: 100%;
+    padding: 12px;
+    border-radius: 14px;
+    border: none;
+    font-size: 1rem;
+    font-weight: 500;
+    background: #4f46e5;
+    color: #ffffff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.explore-btn:hover {
+    background: #4338ca;
+    transform: translateY(-1px);
+}
+
+.explore-btn:active {
+    transform: translateY(0);
+}
+
+/* Explore own city link */
+.explore-own-city {
+    margin-top: 20px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #4f46e5;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.explore-own-city:hover {
+    color: #4338ca;
+    text-decoration: underline;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 600px) {
+    .get-started-container h2 {
+        font-size: 1.5rem;
+    }
+
+    .get-started-form {
+        padding: 24px;
+    }
+}

@@ -1,0 +1,117 @@
+/* ------------------------------
+   CONTACT CONTAINER
+--------------------------------*/
+.contact-container {
+    max-width: 520px;
+    margin: 80px auto;
+    padding: 40px 36px;
+
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+
+    display: flex;
+    flex-direction: column;
+
+    font-family: "Inter", sans-serif;
+    color: #1f2933;
+}
+
+/* ------------------------------
+   HEADINGS
+--------------------------------*/
+.contact-container h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    text-align: center;
+}
+
+.contact-container h3 {
+    font-size: 0.95rem;
+    font-weight: 400;
+    color: #6b7280;
+    text-align: center;
+    line-height: 1.6;
+    margin-bottom: 24px;
+}
+
+/* ------------------------------
+   INPUT FIELDS
+--------------------------------*/
+.email-input,
+.city-input,
+.message-input {
+    width: 100%;
+    padding: 12px 14px;
+    margin-bottom: 16px;
+
+    border-radius: 10px;
+    border: 1px solid #d1d5db;
+    font-size: 0.95rem;
+
+    outline: none;
+    transition: all 0.25s ease;
+}
+
+/* Focus effect */
+.email-input:focus,
+.city-input:focus,
+.message-input:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+/* Placeholder */
+.email-input::placeholder,
+.city-input::placeholder,
+.message-input::placeholder {
+    color: #9ca3af;
+}
+
+/* ------------------------------
+   SUBMIT BUTTON
+--------------------------------*/
+.submit-button {
+    margin-top: 10px;
+    padding: 12px 0;
+
+    background-color: #2563eb;
+    color: #ffffff;
+    border: none;
+    border-radius: 12px;
+
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+
+    transition: all 0.25s ease;
+}
+
+.submit-button:hover {
+    background-color: #1d4ed8;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(37, 99, 235, 0.25);
+}
+
+/* Disabled / Sending state */
+.submit-button:disabled {
+    background-color: #93c5fd;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* ------------------------------
+   RESPONSIVE
+--------------------------------*/
+@media (max-width: 600px) {
+    .contact-container {
+        margin: 40px 16px;
+        padding: 32px 24px;
+    }
+
+    .contact-container h2 {
+        font-size: 1.7rem;
+    }
+}

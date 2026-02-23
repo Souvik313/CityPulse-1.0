@@ -1,0 +1,81 @@
+/* ------------------------------
+   SIDEBAR CONTAINER
+--------------------------------*/
+.sidebar {
+    position: fixed;
+    top: 64px;
+    left: 0;
+    width: 200px;
+    height: calc(100vh - 64px);
+    background-color: #ffffff;
+    box-shadow: 2px 0 12px rgba(0, 0, 0, 0.08);
+    padding: 20px 0;
+    z-index: 999;
+
+    transform: translateX(-100%);
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+}
+
+.sidebar.open {
+    transform: translateX(0);
+}
+
+/* ------------------------------
+   SLIDE ANIMATION
+--------------------------------*/
+@keyframes slideIn {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* ------------------------------
+   LIST
+--------------------------------*/
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* ------------------------------
+   LIST ITEMS
+--------------------------------*/
+.sidebar li {
+    padding: 14px 24px;
+    font-size: 15px;
+    font-weight: 500;
+    color: #1f2937;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* hover effect */
+.sidebar li:hover {
+    background-color: #f1f5ff;
+    color: #2563eb;
+}
+
+/* ------------------------------
+   ACTIVE ITEM (OPTIONAL)
+--------------------------------*/
+.sidebar li.active {
+    background-color: #e0e7ff;
+    color: #1d4ed8;
+    border-left: 4px solid #2563eb;
+}
+
+/* ------------------------------
+   MOBILE FULL HEIGHT
+--------------------------------*/
+@media (max-width: 480px) {
+    .sidebar {
+        width: 220px;
+    }
+}

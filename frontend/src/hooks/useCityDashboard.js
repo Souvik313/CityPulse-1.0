@@ -1,0 +1,85 @@
+import { useState, useEffect, useRef, useCallback } from "react";
+import axios from "axios";
+
+const API_URL = "http://localhost:5000";
+
+const createSection = () => ({
+  loading: false,
+  data: null,
+  error: null,
+  lastUpdated: null
+});
+
+export default function useCityDashboard(
+  city,
+  { pollingInterval = 0, enabled = true } = {}
+) {
+  const [aqi, setAqi] = useState(createSection());
+  const [weather, setWeather] = useState(createSection());
+  const [traffic, setTraffic] = useState(createSection());
+  const [sentiment, setSentiment] = useState(createSection());
+
+const fetchData = async (setState, endpoint) => {
+  if (!city) return;
+
+  setState(prev => ({ ...prev, loading: true, error: null }));
+
+  try {
+    const res = await axios.get(
+      `${API_URL}/api/v1/${endpoint}`,
+      { params: { city } }
+    );
+
+    setState({
+      loading: false,
+      data: res.data.data,
+      error: null,
+      lastUpdated: new Date()
+    });
+  } catch (err) {
+    setState({
+      loading: false,
+      data: null,
+      error: err?.response?.data?.message || err.message,
+      lastUpdated: null
+    });
+  }
+};
+
+  const fetchAll = () => {
+    fetchData(setAqi, "aqi/latest");
+    fetchData(setWeather, "weather/latest");
+    fetchData(setTraffic, "traffic/latest");
+  };
+
+  useEffect(() => {
+    if (!enabled || !city) return;
+
+    fetchAll();
+
+    let intervalId;
+    if (pollingInterval > 0) {
+      intervalId = setInterval(fetchAll, pollingInterval);
+    }
+
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+    };
+  }, [city, enabled, pollingInterval]);
+
+  const globalLoading =
+    aqi.loading || weather.loading || traffic.loading;
+
+  return {
+    aqi,
+    weather,
+    traffic,
+    sentiment,
+    refreshAll: fetchAll,
+    refreshAqi: () => fetchData(setAqi, "aqi/latest"),
+    refreshWeather: () => fetchData(setWeather, "weather/latest"),
+    refreshTraffic: () => fetchData(setTraffic, "traffic/latest"),
+    globalLoading
+  };
+}
+

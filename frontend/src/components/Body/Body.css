@@ -1,0 +1,87 @@
+/* ------------------------------
+   BODY / HERO SECTION
+--------------------------------*/
+.body-container {
+    min-height: calc(100vh - 64px); /* adjust if you have a fixed header */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+    padding: 40px 20px;
+    background: linear-gradient(180deg, #f8fafc, #ffffff);
+    font-family: "Inter", sans-serif;
+    color: #1f2933;
+}
+
+/* ------------------------------
+   HEADINGS
+--------------------------------*/
+.body-container h2 {
+    font-size: 2.6rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #111827;
+}
+
+.body-container h3 {
+    max-width: 850px;
+    font-size: 1.1rem;
+    font-weight: 400;
+    line-height: 1.7;
+    margin-bottom: 18px;
+    color: #4b5563;
+}
+
+/* ------------------------------
+   BUTTONS
+--------------------------------*/
+.learn-more,
+.get-started {
+    padding: 12px 26px;
+    margin: 12px 10px;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+/* Learn More (secondary) */
+.learn-more {
+    background-color: #ffffff;
+    color: #2563eb;
+    border: 2px solid #2563eb;
+}
+
+.learn-more:hover {
+    background-color: #2563eb;
+    color: #ffffff;
+}
+
+/* Get Started (primary) */
+.get-started {
+    background-color: #2563eb;
+    color: #ffffff;
+    border: none;
+}
+
+.get-started:hover {
+    background-color: #1d4ed8;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.25);
+}
+
+/* ------------------------------
+   RESPONSIVE
+--------------------------------*/
+@media (max-width: 768px) {
+    .body-container h2 {
+        font-size: 2.1rem;
+    }
+
+    .body-container h3 {
+        font-size: 1rem;
+    }
+}

@@ -1,0 +1,143 @@
+.weather-trends-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+}
+
+.weather-trends-modal {
+  background: var(--card-bg, #fff);
+  border-radius: var(--radius, 14px);
+  box-shadow: var(--shadow, 0 8px 24px rgba(0, 0, 0, 0.12));
+  max-width: 720px;
+  width: 100%;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.weather-trends-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border, #e6eaf0);
+  flex-wrap: wrap;
+}
+
+.weather-trends-header h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  flex: 1;
+  min-width: 180px;
+}
+
+.weather-trends-period {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.weather-trends-period button {
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  background: var(--bg, #f7f9fc);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.875rem;
+}
+
+.weather-trends-period button.active {
+  background: var(--primary, #2563eb);
+  color: #fff;
+  border-color: var(--primary);
+}
+
+.weather-trends-close {
+  padding: 8px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 1.25rem;
+  line-height: 1;
+  color: var(--muted, #6b7280);
+}
+
+.weather-trends-close:hover {
+  color: var(--text, #1f2937);
+}
+
+.weather-trends-body {
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.weather-trends-loading,
+.weather-trends-error {
+  padding: 24px;
+  text-align: center;
+}
+
+.weather-trends-error {
+  color: var(--danger, #dc2626);
+}
+
+.weather-trends-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.weather-trends-cards .trend-card {
+  background: var(--bg, #f7f9fc);
+  border-radius: 10px;
+  padding: 12px;
+  border: 1px solid var(--border);
+}
+
+.weather-trends-cards .trend-card .label {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin-bottom: 4px;
+}
+
+.weather-trends-cards .trend-card .value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  display: block;
+}
+
+.weather-trends-cards .trend-card .sub {
+  font-size: 0.8rem;
+  color: var(--muted);
+  display: block;
+  margin-top: 4px;
+}
+
+.weather-trends-cards .trend-card.direction.warming .value { color: #dc2626; }
+.weather-trends-cards .trend-card.direction.cooling .value { color: #2563eb; }
+.weather-trends-cards .trend-card.direction.stable .value { color: #6b7280; }
+
+.weather-trends-chart {
+  margin-top: 8px;
+}
+
+.weather-trends-chart h3 {
+  margin: 0 0 12px;
+  font-size: 1rem;
+}
+
+.weather-trends-empty {
+  color: var(--muted);
+  text-align: center;
+  padding: 24px;
+}

@@ -1,0 +1,92 @@
+/* Page wrapper below header */
+.user {
+    max-width: 560px;
+    margin: 96px auto 0;
+    padding: 32px;
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.08);
+    font-family: "Inter", sans-serif;
+}
+
+/* Section title */
+.user h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 24px;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 12px;
+}
+
+/* Name highlight */
+.user h3 {
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: #1f2937;
+    margin-bottom: 18px;
+}
+
+/* Info text */
+.user-email,
+.user-city,
+.join-date {
+    font-size: 0.95rem;
+    color: #4b5563;
+    margin-bottom: 10px;
+}
+
+/* Joined date subtle */
+.join-date {
+    font-size: 0.85rem;
+    color: #9ca3af;
+    margin-top: 16px;
+}
+
+/* Update profile link */
+.update-user {
+    margin-top: 20px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #4f46e5;
+    cursor: pointer;
+    display: inline-block;
+    transition: color 0.2s ease;
+}
+
+.update-user:hover {
+    color: #4338ca;
+    text-decoration: underline;
+}
+
+/* Sign out button */
+.sign-out {
+    width: 100%;
+    margin-top: 28px;
+    padding: 12px;
+    border-radius: 14px;
+    border: none;
+    font-size: 1rem;
+    font-weight: 500;
+    background: #ef4444;
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.sign-out:hover {
+    background: #dc2626;
+    transform: translateY(-1px);
+}
+
+.sign-out:active {
+    transform: translateY(0);
+}
+
+/* Mobile responsive */
+@media (max-width: 600px) {
+    .user {
+        margin: 80px 16px 0;
+        padding: 24px;
+    }
+}
