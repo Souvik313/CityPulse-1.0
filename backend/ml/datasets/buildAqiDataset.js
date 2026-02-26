@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
 import { dirname, resolve } from 'path';
+import path from 'path';
 import fs from 'fs';
 import AQIData from '../../models/AQI.model.js';
 
@@ -9,7 +10,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 // Load environment variables
-dotenv.config({ path: resolve(__dirname, '../../../.env.development.local') });
+console.log('Loading .env from:', path.join(__dirname, '..', '..', '.env.development.local'));
+dotenv.config({ path: path.join(__dirname, '..', '..', '.env.development.local') });
+console.log('DB_URI loaded:', process.env.DB_URI ? 'YES' : 'NO');
 
 const { DB_URI } = process.env;
 
@@ -18,6 +21,8 @@ if (!DB_URI) {
     process.exit(1);
 }
 
+const MAX_HOUR_GAP = 3; // Maximum hours between consecutive records to form a training sample
+
 /**
  * Build AQI dataset for next-hour prediction
  * @param {string} cityId - MongoDB ObjectId of the city
@@ -25,7 +30,7 @@ if (!DB_URI) {
  * @param {string} outputFormat - 'json' or 'csv' (default: 'json')
  * @returns {Promise<Array>} Array of training samples
  */
-async function buildAqiDataset(cityId, daysBack = 14, outputFormat = 'json') {
+async function buildAqiDataset(cityId, daysBack = 30, outputFormat = 'json') {
     try {
         // Connect to database
         await mongoose.connect(DB_URI);
@@ -57,12 +62,6 @@ async function buildAqiDataset(cityId, daysBack = 14, outputFormat = 'json') {
 
         // Build dataset with features and targets
         const dataset = [];
-        
-        // Create a time-indexed map for faster lookups
-        const timeMap = new Map();
-        aqiRecords.forEach((record, index) => {
-            timeMap.set(record.recordedAt.getTime(), index);
-        });
 
         // Process each record as a potential training sample
         // Skip the last record since we need next-hour target
@@ -72,15 +71,15 @@ async function buildAqiDataset(cityId, daysBack = 14, outputFormat = 'json') {
 
             // Only create sample if next record is approximately 1 hour ahead
             const timeDiff = (nextRecord.recordedAt - currentRecord.recordedAt) / (1000 * 60 * 60); // hours
-            
-            // Accept records within 0.5 to 2 hours (handles data gaps)
-            if (timeDiff < 0.5 || timeDiff > 2) {
+
+            // Accept records within 0.5 to MAX_HOUR_GAP hours (handles data gaps)
+            if (timeDiff < 0.5 || timeDiff > MAX_HOUR_GAP) {
                 continue;
             }
 
             const currentTime = currentRecord.recordedAt;
             const features = extractFeatures(currentRecord, aqiRecords, i, currentTime);
-            
+
             // Target: next hour's AQI value
             const target = nextRecord.aqiValue;
 
@@ -89,6 +88,12 @@ async function buildAqiDataset(cityId, daysBack = 14, outputFormat = 'json') {
                 target_aqi: target,
                 timestamp: currentTime.toISOString()
             });
+        }
+
+        // Guard: check dataset is not empty before accessing dataset[0]
+        if (dataset.length === 0) {
+            console.warn('No valid training samples could be created. Check time gaps between records.');
+            return dataset;
         }
 
         console.log(`Created ${dataset.length} training samples`);
@@ -141,7 +146,7 @@ function extractFeatures(currentRecord, allRecords, currentIndex, currentTime) {
     const hour = currentTime.getHours();
     const dayOfWeek = currentTime.getDay(); // 0 = Sunday, 6 = Saturday
     const dayOfMonth = currentTime.getDate();
-    
+
     features.hour_of_day = hour;
     features.day_of_week = dayOfWeek;
     features.day_of_month = dayOfMonth;
@@ -160,15 +165,15 @@ function extractFeatures(currentRecord, allRecords, currentIndex, currentTime) {
     features.avg_aqi_1h = calculateMean(recent1h.map(r => r.aqiValue));
     features.avg_aqi_6h = calculateMean(recent6h.map(r => r.aqiValue));
     features.avg_aqi_24h = calculateMean(recent24h.map(r => r.aqiValue));
-    
+
     features.max_aqi_1h = calculateMax(recent1h.map(r => r.aqiValue));
     features.max_aqi_6h = calculateMax(recent6h.map(r => r.aqiValue));
     features.max_aqi_24h = calculateMax(recent24h.map(r => r.aqiValue));
-    
+
     features.min_aqi_1h = calculateMin(recent1h.map(r => r.aqiValue));
     features.min_aqi_6h = calculateMin(recent6h.map(r => r.aqiValue));
     features.min_aqi_24h = calculateMin(recent24h.map(r => r.aqiValue));
-    
+
     features.std_aqi_1h = calculateStd(recent1h.map(r => r.aqiValue));
     features.std_aqi_6h = calculateStd(recent6h.map(r => r.aqiValue));
     features.std_aqi_24h = calculateStd(recent24h.map(r => r.aqiValue));
@@ -183,7 +188,7 @@ function extractFeatures(currentRecord, allRecords, currentIndex, currentTime) {
     pollutants.forEach(pollutant => {
         const values6h = recent6h.map(r => r.pollutants?.[pollutant]).filter(v => v != null);
         const values24h = recent24h.map(r => r.pollutants?.[pollutant]).filter(v => v != null);
-        
+
         features[`avg_${pollutant}_6h`] = calculateMean(values6h);
         features[`avg_${pollutant}_24h`] = calculateMean(values24h);
     });
@@ -192,12 +197,12 @@ function extractFeatures(currentRecord, allRecords, currentIndex, currentTime) {
     const yesterday = new Date(currentTime);
     yesterday.setDate(yesterday.getDate() - 1);
     yesterday.setHours(hour, 0, 0, 0);
-    
+
     const lastWeek = new Date(currentTime);
     lastWeek.setDate(lastWeek.getDate() - 7);
     lastWeek.setHours(hour, 0, 0, 0);
 
-    const yesterdayRecord = findClosestRecord(allRecords, currentIndex, yesterday, 2); // within 2 hours
+    const yesterdayRecord = findClosestRecord(allRecords, currentIndex, yesterday, 2);
     const lastWeekRecord = findClosestRecord(allRecords, currentIndex, lastWeek, 2);
 
     features.aqi_same_hour_yesterday = yesterdayRecord?.aqiValue || features.current_aqi;
@@ -215,17 +220,17 @@ function extractFeatures(currentRecord, allRecords, currentIndex, currentTime) {
 
     // === Rate of change (slope) ===
     if (recent6h.length >= 2) {
-        const times = recent6h.map(r => r.recordedAt.getTime());
-        const aqis = recent6h.map(r => r.aqiValue);
-        features.aqi_slope_6h = calculateSlope(times, aqis);
+        const times6h = recent6h.map(r => r.recordedAt.getTime());
+        const aqis6h = recent6h.map(r => r.aqiValue);
+        features.aqi_slope_6h = calculateSlope(times6h, aqis6h);
     } else {
         features.aqi_slope_6h = 0;
     }
 
     if (recent24h.length >= 2) {
-        const times = recent24h.map(r => r.recordedAt.getTime());
-        const aqis = recent24h.map(r => r.aqiValue);
-        features.aqi_slope_24h = calculateSlope(times, aqis);
+        const times24h = recent24h.map(r => r.recordedAt.getTime());
+        const aqis24h = recent24h.map(r => r.aqiValue);
+        features.aqi_slope_24h = calculateSlope(times24h, aqis24h);
     } else {
         features.aqi_slope_24h = 0;
     }
@@ -245,31 +250,34 @@ function extractFeatures(currentRecord, allRecords, currentIndex, currentTime) {
  */
 function getRecordsInRange(allRecords, currentIndex, startTime, endTime) {
     const records = [];
-    // Search backwards from current index
+    // Search backwards from current index — data is pre-sorted ascending by recordedAt
     for (let i = currentIndex; i >= 0; i--) {
         const record = allRecords[i];
         if (record.recordedAt < startTime) break;
         if (record.recordedAt >= startTime && record.recordedAt <= endTime) {
-            records.unshift(record); // Add to beginning to maintain chronological order
+            records.unshift(record); // Maintain chronological order
         }
     }
     return records;
 }
 
 /**
- * Find closest record to target time
+ * Find closest record to target time within maxHoursDiff
+ * Uses a wider search window (±24 records) to handle non-hourly spaced data
  */
 function findClosestRecord(allRecords, currentIndex, targetTime, maxHoursDiff = 2) {
     let closestRecord = null;
     let minDiff = Infinity;
     const maxDiff = maxHoursDiff * 60 * 60 * 1000;
 
-    // Search around the expected index (assuming roughly hourly data)
-    const estimatedIndex = currentIndex - Math.floor((allRecords[currentIndex].recordedAt - targetTime) / (60 * 60 * 1000));
-    const searchStart = Math.max(0, estimatedIndex - 10);
-    const searchEnd = Math.min(allRecords.length, estimatedIndex + 10);
+    // Estimate index based on target time, with wider ±24 window for irregular data
+    const estimatedIndex = currentIndex - Math.floor(
+        (allRecords[currentIndex].recordedAt - targetTime) / (60 * 60 * 1000)
+    );
+    const searchStart = Math.max(0, estimatedIndex - 24);
+    const searchEnd = Math.min(allRecords.length - 1, estimatedIndex + 24);
 
-    for (let i = searchStart; i < searchEnd && i <= currentIndex; i++) {
+    for (let i = searchStart; i <= searchEnd && i <= currentIndex; i++) {
         const diff = Math.abs(allRecords[i].recordedAt - targetTime);
         if (diff < minDiff && diff <= maxDiff) {
             minDiff = diff;
@@ -324,19 +332,23 @@ function calculateMin(values) {
 
 /**
  * Calculate slope (linear regression)
+ * Pairs x and y together before filtering to avoid index mismatch
  */
 function calculateSlope(times, values) {
     if (!times || !values || times.length < 2 || values.length < 2) return 0;
-    
-    const n = Math.min(times.length, values.length);
-    const x = times.slice(0, n);
-    const y = values.slice(0, n).filter(v => v != null && isFinite(v));
-    
-    if (y.length < 2) return 0;
 
-    // Normalize times to start from 0
-    const xMin = Math.min(...x);
-    const xNorm = x.map(t => (t - xMin) / (1000 * 60 * 60)); // Convert to hours
+    // Pair times and values together, then filter out invalid values
+    const paired = times
+        .slice(0, Math.min(times.length, values.length))
+        .map((t, i) => ({ t, v: values[i] }))
+        .filter(p => p.v != null && isFinite(p.v));
+
+    if (paired.length < 2) return 0;
+
+    // Normalize times to start from 0, convert to hours
+    const tMin = Math.min(...paired.map(p => p.t));
+    const xNorm = paired.map(p => (p.t - tMin) / (1000 * 60 * 60));
+    const y = paired.map(p => p.v);
 
     const xMean = calculateMean(xNorm);
     const yMean = calculateMean(y);
@@ -345,10 +357,8 @@ function calculateSlope(times, values) {
     let denominator = 0;
 
     for (let i = 0; i < xNorm.length; i++) {
-        if (y[i] != null && isFinite(y[i])) {
-            numerator += (xNorm[i] - xMean) * (y[i] - yMean);
-            denominator += Math.pow(xNorm[i] - xMean, 2);
-        }
+        numerator += (xNorm[i] - xMean) * (y[i] - yMean);
+        denominator += Math.pow(xNorm[i] - xMean, 2);
     }
 
     return denominator !== 0 ? numerator / denominator : 0;
@@ -364,6 +374,7 @@ async function saveAsJSON(dataset, filepath) {
 
 /**
  * Save dataset as CSV
+ * Properly escapes quotes inside string values
  */
 async function saveAsCSV(dataset, filepath) {
     if (dataset.length === 0) {
@@ -376,9 +387,10 @@ async function saveAsCSV(dataset, filepath) {
     dataset.forEach(row => {
         const values = headers.map(header => {
             const value = row[header];
-            // Handle strings with commas
-            if (typeof value === 'string' && value.includes(',')) {
-                return `"${value}"`;
+            // Properly escape all strings — double up any internal quotes
+            if (typeof value === 'string') {
+                const escaped = value.replace(/"/g, '""');
+                return `"${escaped}"`;
             }
             return value;
         });
