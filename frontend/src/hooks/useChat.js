@@ -20,6 +20,13 @@ export default function useChat({ baseUrl = `${API_URL}/api/v1/chat`, cityId } =
     return returned;
   };
 
+  const fetchMessages = async () => {
+    if (!sessionId) return;
+    const res = await fetch(`${baseUrl}/messages?sessionId=${encodeURIComponent(sessionId)}`);
+    const data = await res.json();
+    if (res.ok) setMessages(data.data || []);
+  };
+
   const sendMessage = async ({ message, sender = 'user' }) => {
     if (!sessionId) throw new Error('No active session');
     const res = await fetch(`${baseUrl}/message`, {
@@ -32,14 +39,7 @@ export default function useChat({ baseUrl = `${API_URL}/api/v1/chat`, cityId } =
     await fetchMessages();
     return data;
   };
-
-  const fetchMessages = async () => {
-    if (!sessionId) return;
-    const res = await fetch(`${baseUrl}/messages?sessionId=${encodeURIComponent(sessionId)}`);
-    const data = await res.json();
-    if (res.ok) setMessages(data.data || []);
-  };
-
+  
   const endSession = async () => {
     if (!sessionId) return;
     await fetch(`${baseUrl}/end`, {

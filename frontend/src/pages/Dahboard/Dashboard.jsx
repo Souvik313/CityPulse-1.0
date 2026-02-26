@@ -8,7 +8,9 @@ import haze_icon from '../../assets/haze.png';
 import axios from "axios";
 import AQITrendsModal from "../../components/AQITrendsModal/AQITrendsModal.jsx";
 import WeatherTrendsModal from "../../components/WeatherTrendsModal/WeatherTrendsModal.jsx";
+import TrafficTrendsModal from "../../components/TrafficTrendsModal/TrafficTrendsModal.jsx";
 import SentimentTrendsModal from "../../components/SentimentTrendsModal/SentimentTrendsModal.jsx";
+import ChatbotIcon from '../../assets/ChatbotIcon.svg';
 import "./Dashboard.css";
 import Chat from "../../components/Chat/Chat.jsx";
 const API_URL = "http://localhost:5000";
@@ -19,7 +21,9 @@ export default function Dashboard() {
   const [showHotspotsModal , setShowHotspotsModal]  = useState(false);
   const [showAqiTrendsModal, setShowAqiTrendsModal] = useState(false);
   const [showWeatherTrendsModal, setShowWeatherTrendsModal] = useState(false);
+  const [showTrafficTrendsModal , setShowTrafficTrendsModal] = useState(false);
   const [showSentimentTrendsModal, setShowSentimentTrendsModal] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -440,8 +444,7 @@ export default function Dashboard() {
                       Updated {formatTimeAgo(traffic.lastUpdated)}
                     </div>
                     <br />
-                      <button className="analyze-btn">Analyze latest trends</button>
-
+                      <button className="analyze-btn" disabled={traffic.loading} onClick={() => setShowTrafficTrendsModal(true)}>Analyze latest trends</button>
                   </div>
                   
                 )}
@@ -474,7 +477,11 @@ export default function Dashboard() {
 
         {/* Chat widget for city feedback */}
         <div style={{position: 'fixed', right: 16, bottom: 16, zIndex: 60}}>
-          <Chat cityId={selectedCity?._id} />
+          <img src={ChatbotIcon} 
+              alt="open-chat" 
+              onClick={() => setIsChatOpen(prev => !prev)}
+              style={{cursor : 'pointer'}}/>
+              {isChatOpen && <Chat cityId={selectedCity?._id} />} 
         </div>
 
         <div className="view-city-map">
@@ -491,6 +498,12 @@ export default function Dashboard() {
           <WeatherTrendsModal
             cityName={cityName}
             onClose={() => setShowWeatherTrendsModal(false)}
+          />
+        )}
+        {showTrafficTrendsModal && cityName && (
+          <TrafficTrendsModal 
+            cityName={cityName}
+            onClose={() => setShowTrafficTrendsModal(false)}
           />
         )}
         {showSentimentTrendsModal && cityName && (

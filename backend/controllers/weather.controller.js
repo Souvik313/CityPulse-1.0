@@ -175,7 +175,7 @@ export const getLatestWeatherByCity = catchAsync(async (req, res, next) => {
 });
 
 export const getWeatherHistory = catchAsync(async (req, res, next) => {
-  const { city, limit = 50 } = req.query;
+  const { city, limit = 200 } = req.query;
 
   if (!city) {
     return next(

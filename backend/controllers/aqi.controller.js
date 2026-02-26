@@ -128,7 +128,7 @@ export const getLatestAQIByCity = catchAsync(async (req, res, next) => {
 });
 
 export const getAQIHistory = catchAsync(async (req, res, next) => {
-  const { city, limit = 50 } = req.query;
+  const { city, limit = 200 } = req.query;
 
   if (!city) {
     return next(

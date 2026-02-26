@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="none">
+  <defs>
+    <linearGradient id="botGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2f6bff"/>
+      <stop offset="100%" stop-color="#7c3aed"/>
+    </linearGradient>
+    <linearGradient id="faceGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e2333"/>
+      <stop offset="100%" stop-color="#0f1117"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="1.5" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Outer glow ring -->
+  <circle cx="24" cy="24" r="22" fill="none" stroke="url(#botGrad)" stroke-width="1" opacity="0.3"/>
+
+  <!-- Main body circle -->
+  <circle cx="24" cy="24" r="19" fill="url(#botGrad)"/>
+
+  <!-- Inner face plate -->
+  <rect x="11" y="15" width="26" height="20" rx="7" fill="url(#faceGrad)"/>
+
+  <!-- Antenna -->
+  <line x1="24" y1="5" x2="24" y2="11" stroke="url(#botGrad)" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="24" cy="4.5" r="2.5" fill="#2f6bff" filter="url(#glow)"/>
+
+  <!-- Left eye -->
+  <rect x="14" y="20" width="7" height="5" rx="2.5" fill="#2f6bff" opacity="0.9"/>
+  <!-- Left eye shine -->
+  <circle cx="16" cy="21.5" r="1" fill="white" opacity="0.5"/>
+
+  <!-- Right eye -->
+  <rect x="27" y="20" width="7" height="5" rx="2.5" fill="#2f6bff" opacity="0.9"/>
+  <!-- Right eye shine -->
+  <circle cx="29" cy="21.5" r="1" fill="white" opacity="0.5"/>
+
+  <!-- Smile / mouth -->
+  <path d="M17 29.5 Q24 33.5 31 29.5" stroke="#2f6bff" stroke-width="1.8" stroke-linecap="round" fill="none" opacity="0.9"/>
+
+  <!-- Side bolts -->
+  <circle cx="8" cy="22" r="2" fill="url(#botGrad)" opacity="0.7"/>
+  <circle cx="40" cy="22" r="2" fill="url(#botGrad)" opacity="0.7"/>
+</svg>

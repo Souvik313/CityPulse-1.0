@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import useChat from '../../hooks/useChat';
 import { io as createSocket } from 'socket.io-client';
+import './Chat.css'
 
 export default function Chat({ cityId }) {
   const { sessionId, messages, startSession, sendMessage, endSession, pushMessage } = useChat({ cityId });
   const [input, setInput] = useState('');
-  const [isBotTyping, setIsBotTyping] = useState(false); // new
+  const [isBotTyping, setIsBotTyping] = useState(false);
   const messagesRef = useRef(null);
   const socketRef = useRef(null);
 
@@ -51,84 +52,76 @@ export default function Chat({ cityId }) {
         await handleStart();
         await new Promise((r) => setTimeout(r, 150));
       }
-      setIsBotTyping(true); // show typing indicator
+      setIsBotTyping(true);
       await sendMessage({ message: input.trim(), sender: 'user' });
       setInput('');
     } catch (err) {
       console.error(err);
       alert('Failed to send message');
     } finally {
-      setIsBotTyping(false); // hide typing indicator
+      setIsBotTyping(false);
     }
   };
 
   return (
-    <div className="chat-widget" style={{ border: '1px solid #ccc', padding: 8, width: 320 }}>
-      <div style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
-        <button onClick={handleStart}>{sessionId ? 'Resume' : 'Start Chat'}</button>
-        {sessionId && <button onClick={endSession}>End</button>}
+    <div className="chat-widget">
+      <div className="chat-actions">
+        <button className="chat-btn chat-btn--start" onClick={handleStart}>
+          {sessionId ? 'Resume' : 'Start Chat'}
+        </button>
+        {sessionId && (
+          <button className="chat-btn chat-btn--end" onClick={endSession}>End</button>
+        )}
       </div>
 
-      <div
-        ref={messagesRef}
-        className="chat-messages"
-        style={{ height: 240, overflow: 'auto', border: '1px solid #eee', padding: 8, marginBottom: 8 }}
-      >
+      <div ref={messagesRef} className="chat-messages">
         {messages.length === 0 && !isBotTyping && (
-          <div style={{ color: '#666' }}>No messages yet. Start the conversation.</div>
+          <div className="chat-empty">No messages yet. Start the conversation.</div>
         )}
 
         {messages.map((m) => (
           <div
             key={m._id}
-            style={{ marginBottom: 6, textAlign: m.sender === 'bot' ? 'left' : 'right' }}
+            className={`chat-message-row chat-message-row--${m.sender === 'bot' ? 'bot' : 'user'}`}
           >
-            <div
-              style={{
-                display: 'inline-block',
-                padding: '6px 10px',
-                borderRadius: 6,
-                background: m.sender === 'bot' ? '#f1f1f1' : '#007bff',
-                color: m.sender === 'bot' ? '#000' : '#fff'
-              }}
-            >
-              {m.content}
-            </div>
-            <div style={{ fontSize: 11, color: '#888' }}>
-              {new Date(m.createdAt).toLocaleTimeString()}
+            {m.sender === 'bot' && <div className="chat-avatar">🤖</div>}
+            <div className="chat-bubble-wrap">
+              <div className={`chat-bubble chat-bubble--${m.sender === 'bot' ? 'bot' : 'user'}`}>
+                {m.content}
+              </div>
+              <div className="chat-timestamp">
+                {new Date(m.createdAt).toLocaleTimeString()}
+              </div>
             </div>
           </div>
         ))}
 
-        {/* Bot typing indicator */}
         {isBotTyping && (
-          <div style={{ marginBottom: 6, textAlign: 'left' }}>
-            <div
-              style={{
-                display: 'inline-block',
-                padding: '6px 10px',
-                borderRadius: 6,
-                background: '#f1f1f1',
-                color: '#888',
-                fontStyle: 'italic'
-              }}
-            >
-              Bot is typing...
+          <div className="chat-message-row chat-message-row--bot">
+            <div className="chat-avatar">🤖</div>
+            <div className="chat-bubble-wrap">
+              <div className="chat-bubble chat-bubble--bot chat-bubble--typing">
+                <span className="chat-dot" />
+                <span className="chat-dot" />
+                <span className="chat-dot" />
+              </div>
             </div>
           </div>
         )}
       </div>
 
-      <div style={{ display: 'flex', gap: 8 }}>
+      <div className="chat-input-row">
         <input
+          className="chat-input"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-          style={{ flex: 1 }}
-          disabled={isBotTyping} // prevent sending while bot is replying
+          disabled={isBotTyping}
           placeholder={isBotTyping ? 'Waiting for reply...' : 'Type a message...'}
         />
-        <button onClick={handleSend} disabled={isBotTyping}>Send</button>
+        <button className="chat-btn chat-btn--send" onClick={handleSend} disabled={isBotTyping}>
+          ➤
+        </button>
       </div>
     </div>
   );
