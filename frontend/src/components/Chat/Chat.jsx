@@ -67,7 +67,7 @@ export default function Chat({ cityId }) {
     <div className="chat-widget">
       <div className="chat-actions">
         <button className="chat-btn chat-btn--start" onClick={handleStart}>
-          {sessionId ? 'Resume' : 'Start Chat'}
+          {sessionId ? 'Pause' : 'Start Chat'}
         </button>
         {sessionId && (
           <button className="chat-btn chat-btn--end" onClick={endSession}>End</button>

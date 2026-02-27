@@ -53,13 +53,13 @@ export default function SentimentTrendsModal({ cityName, onClose }) {
               className={period === "24h" ? "active" : ""}
               onClick={() => setPeriod("24h")}
             >
-              24 hours
+              24h
             </button>
             <button
               className={period === "7d" ? "active" : ""}
               onClick={() => setPeriod("7d")}
             >
-              7 days
+              7d
             </button>
           </div>
           <button type="button" className="sentiment-trends-close" onClick={onClose} aria-label="Close">

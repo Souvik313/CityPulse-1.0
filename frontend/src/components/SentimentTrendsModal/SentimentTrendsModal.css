@@ -1,7 +1,11 @@
+/* SentimentTrendsModal.css */
+
 .sentiment-trends-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -10,158 +14,277 @@
 }
 
 .sentiment-trends-modal {
-  background: var(--card-bg, #fff);
-  border-radius: var(--radius, 14px);
-  box-shadow: var(--shadow, 0 8px 24px rgba(0, 0, 0, 0.12));
+  background: var(--card-bg, #ffffff);
+  border-radius: 16px;
+  border: 1px solid var(--border, #e2e8f0);
+  box-shadow: var(--shadow-lg, 0 24px 64px rgba(0, 0, 0, 0.15));
   max-width: 720px;
   width: 100%;
   max-height: 90vh;
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  transition: background 0.3s ease, border-color 0.3s ease;
 }
 
+/* ── Header ── */
 .sentiment-trends-header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 12px;
-  padding: 16px 20px;
-  border-bottom: 1px solid var(--border, #e6eaf0);
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border, #e2e8f0);
+  background: var(--card-header-bg, #f8fafc);
+  flex-shrink: 0;
   flex-wrap: wrap;
+  transition: background 0.3s ease, border-color 0.3s ease;
 }
 
 .sentiment-trends-header h2 {
   margin: 0;
-  font-size: 1.25rem;
+  font-size: 18px;
+  font-weight: 700;
   flex: 1;
   min-width: 180px;
+  color: var(--text, #0f172a);
 }
 
+/* ── Period toggle ── */
 .sentiment-trends-period {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
+  background: var(--bg-subtle, #e2e8f0);
+  border-radius: 8px;
+  padding: 3px;
+}
+
+.sentiment-trends-period span {
+  display: none; /* hide the "Period:" label to match tt style */
 }
 
 .sentiment-trends-period button {
-  padding: 6px 12px;
-  border: 1px solid var(--border);
-  background: var(--bg, #f7f9fc);
-  border-radius: 8px;
+  background: none;
+  border: none;
+  padding: 5px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted, #64748b);
   cursor: pointer;
-  font-size: 0.875rem;
+  transition: all 0.15s ease;
+  font-family: var(--font, inherit);
 }
 
 .sentiment-trends-period button.active {
-  background: var(--primary, #2563eb);
-  color: #fff;
-  border-color: var(--primary);
+  background: var(--card-bg, #ffffff);
+  color: var(--text, #0f172a);
+  border-color: transparent;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
 }
 
+/* ── Close button ── */
 .sentiment-trends-close {
-  padding: 8px;
+  background: none;
   border: none;
-  background: transparent;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  font-size: 16px;
+  color: var(--muted, #64748b);
   cursor: pointer;
-  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease, color 0.15s ease;
   line-height: 1;
-  color: var(--muted, #6b7280);
+  padding: 0;
 }
 
 .sentiment-trends-close:hover {
-  color: var(--text, #1f2937);
+  background: var(--bg-subtle, #e2e8f0);
+  color: var(--text, #0f172a);
 }
 
+/* ── Body ── */
 .sentiment-trends-body {
-  padding: 20px;
+  padding: 24px;
   overflow-y: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  background: var(--card-bg, #ffffff);
+  transition: background 0.3s ease;
 }
 
 .sentiment-trends-hint {
-  font-size: 0.875rem;
-  color: var(--muted);
-  margin: 0 0 16px;
+  font-size: 13px;
+  color: var(--muted, #64748b);
+  margin: 0;
 }
 
-.sentiment-trends-loading,
+/* ── Loading / Error ── */
+.sentiment-trends-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 48px;
+  color: var(--muted, #64748b);
+  font-size: 14px;
+}
+
+.sentiment-trends-loading::before {
+  content: '';
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--border, #e2e8f0);
+  border-top-color: var(--primary, #3b82f6);
+  border-radius: 50%;
+  animation: st-spin 0.7s linear infinite;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+@keyframes st-spin {
+  to { transform: rotate(360deg); }
+}
+
 .sentiment-trends-error {
-  padding: 24px;
+  background: var(--danger-light, #fef2f2);
+  color: var(--danger, #b91c1c);
+  border: 1px solid rgba(224, 49, 49, 0.25);
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 14px;
   text-align: center;
 }
 
-.sentiment-trends-error {
-  color: var(--danger, #dc2626);
-}
-
+/* ── Stat Cards ── */
 .sentiment-trends-cards {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   gap: 12px;
-  margin-bottom: 24px;
+  margin-bottom: 0;
 }
 
 .sentiment-trends-cards .trend-card {
-  background: var(--bg, #f7f9fc);
-  border-radius: 10px;
-  padding: 12px;
-  border: 1px solid var(--border);
+  background: var(--bg, #f8fafc);
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: background 0.3s ease, border-color 0.3s ease;
 }
 
 .sentiment-trends-cards .trend-card .label {
   display: block;
-  font-size: 0.75rem;
-  color: var(--muted);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted, #94a3b8);
   text-transform: uppercase;
-  letter-spacing: 0.02em;
-  margin-bottom: 4px;
+  letter-spacing: 0.05em;
+  margin-bottom: 2px;
 }
 
 .sentiment-trends-cards .trend-card .value {
-  font-size: 1.25rem;
+  font-size: 22px;
   font-weight: 700;
   display: block;
+  color: var(--text, #0f172a);
+  line-height: 1.1;
 }
 
 .sentiment-trends-cards .trend-card .sub {
-  font-size: 0.8rem;
-  color: var(--muted);
+  font-size: 12px;
+  color: var(--muted, #94a3b8);
   display: block;
-  margin-top: 4px;
+  margin-top: 2px;
 }
 
-.sentiment-trends-cards .trend-card.direction.improving .value { color: #059669; }
-.sentiment-trends-cards .trend-card.direction.declining .value { color: #dc2626; }
-.sentiment-trends-cards .trend-card.direction.stable .value { color: #6b7280; }
+.sentiment-trends-cards .trend-card.direction.improving .value { color: var(--success, #059669); }
+.sentiment-trends-cards .trend-card.direction.declining .value  { color: var(--danger, #dc2626); }
+.sentiment-trends-cards .trend-card.direction.stable .value    { color: var(--muted, #6b7280); }
 
+/* ── Chart section ── */
 .sentiment-trends-chart {
-  margin-top: 8px;
+  background: var(--bg, #f8fafc);
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: 12px;
+  padding: 18px 20px;
+  transition: background 0.3s ease, border-color 0.3s ease;
 }
 
 .sentiment-trends-chart h3 {
-  margin: 0 0 12px;
-  font-size: 1rem;
+  margin: 0 0 4px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text, #0f172a);
 }
 
+/* ── Bottom bars grid ── */
 .sentiment-trends-bars {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 24px;
-  margin-top: 24px;
+  gap: 16px;
+}
+
+.sentiment-bar-block {
+  background: var(--bg, #f8fafc);
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: 12px;
+  padding: 18px 20px;
+  transition: background 0.3s ease, border-color 0.3s ease;
 }
 
 .sentiment-bar-block h3 {
-  margin: 0 0 8px;
-  font-size: 0.95rem;
+  margin: 0 0 12px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text, #0f172a);
 }
 
+/* ── Empty state ── */
 .sentiment-trends-empty {
-  color: var(--muted);
+  color: var(--muted, #94a3b8);
   text-align: center;
-  padding: 24px;
+  padding: 32px;
+  font-size: 14px;
 }
 
+/* ── Scrollbar ── */
+.sentiment-trends-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sentiment-trends-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sentiment-trends-body::-webkit-scrollbar-thumb {
+  background: var(--border-strong, #cbd5e1);
+  border-radius: 3px;
+}
+
+html.dark .sentiment-trends-body::-webkit-scrollbar-thumb {
+  background: var(--border-strong, #2e2e42);
+}
+
+/* ── Responsive ── */
 @media (max-width: 560px) {
   .sentiment-trends-bars {
     grid-template-columns: 1fr;
+  }
+
+  .sentiment-trends-header {
+    padding: 16px;
+  }
+
+  .sentiment-trends-body {
+    padding: 16px;
   }
 }

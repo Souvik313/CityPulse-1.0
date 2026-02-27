@@ -40,6 +40,7 @@ export default function WeatherTrendsModal({ cityName, onClose }) {
       fullTime: r.recordedAt,
       temp: r.temperature,
       humidity: r.humidity != null ? r.humidity : undefined,
+      pressure: r.pressure != null ? r.pressure : undefined,
     })) ?? [];
 
   const avgTemp = trends?.averageTemp;
@@ -55,13 +56,13 @@ export default function WeatherTrendsModal({ cityName, onClose }) {
               className={period === "24h" ? "active" : ""}
               onClick={() => setPeriod("24h")}
             >
-              24 hours
+              24h
             </button>
             <button
               className={period === "7d" ? "active" : ""}
               onClick={() => setPeriod("7d")}
             >
-              7 days
+              7d
             </button>
           </div>
           <button type="button" className="weather-trends-close" onClick={onClose} aria-label="Close">
@@ -157,6 +158,41 @@ export default function WeatherTrendsModal({ cityName, onClose }) {
                         strokeWidth={2}
                         dot={false}
                         name="humidity"
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </section>
+                
+              )}
+              {chartData.length > 0 && chartData.some((d) => d.pressure != null) && (
+                <section className="weather-trends-chart">
+                  <h3>Pressure over time</h3>
+                  <ResponsiveContainer width="100%" height={220}>
+                    <LineChart data={chartData} margin={{ top: 8, right: 16, left: 0, bottom: 8 }}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#eee" />
+                      <XAxis
+                        dataKey="time"
+                        tick={{ fontSize: 11 }}
+                        interval="preserveStartEnd"
+                      />
+                      <YAxis yAxisId="pressure" domain={["auto", "auto"]} tick={{ fontSize: 11 }} />
+                      <Tooltip
+                        labelFormatter={(_, payload) =>
+                          payload?.[0]?.payload?.fullTime
+                            ? formatDate(payload[0].payload.fullTime)
+                            : ""
+                        }
+                        formatter={(value) => [`${value} hPa`, "Pressure"]}
+                      />
+                      <Legend />
+                      <Line
+                        yAxisId="pressure"
+                        type="monotone"
+                        dataKey="pressure"
+                        stroke="#7c3aed"
+                        strokeWidth={2}
+                        dot={false}
+                        name="pressure"
                       />
                     </LineChart>
                   </ResponsiveContainer>
