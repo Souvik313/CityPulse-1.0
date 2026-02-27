@@ -1,117 +1,131 @@
-/* ------------------------------
-   CONTACT CONTAINER
---------------------------------*/
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap');
+
+/* ── Container ── */
 .contact-container {
-    max-width: 520px;
-    margin: 80px auto;
-    padding: 40px 36px;
-
-    background-color: #ffffff;
-    border-radius: 16px;
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
-
-    display: flex;
-    flex-direction: column;
-
-    font-family: "Inter", sans-serif;
-    color: #1f2933;
+  max-width: 500px;
+  margin: 72px auto 80px;
+  padding: 40px 40px 36px;
+  background: #ffffff;
+  border-radius: 24px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.04), 0 16px 48px rgba(0,0,0,0.08);
+  border: 1px solid #f1f5f9;
+  display: flex;
+  flex-direction: column;
+  font-family: 'DM Sans', system-ui, sans-serif;
 }
 
-/* ------------------------------
-   HEADINGS
---------------------------------*/
+/* ── Title ── */
 .contact-container h2 {
-    font-size: 2rem;
-    font-weight: 700;
-    margin-bottom: 12px;
-    text-align: center;
+  font-size: 2rem;
+  font-weight: 750;
+  color: #0f172a;
+  text-align: center;
+  letter-spacing: -0.6px;
+  margin-bottom: 10px;
+  line-height: 1.2;
 }
 
+.contact-container h2::after {
+  content: "";
+  display: block;
+  width: 40px;
+  height: 4px;
+  background: linear-gradient(90deg, #3b5bdb, #6b8cff);
+  border-radius: 4px;
+  margin: 10px auto 0;
+}
+
+/* ── Subtitle ── */
 .contact-container h3 {
-    font-size: 0.95rem;
-    font-weight: 400;
-    color: #6b7280;
-    text-align: center;
-    line-height: 1.6;
-    margin-bottom: 24px;
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: #94a3b8;
+  text-align: center;
+  line-height: 1.65;
+  margin-bottom: 32px;
+  margin-top: 16px;
 }
 
-/* ------------------------------
-   INPUT FIELDS
---------------------------------*/
+/* ── Input fields ── */
 .email-input,
 .city-input,
 .message-input {
-    width: 100%;
-    padding: 12px 14px;
-    margin-bottom: 16px;
-
-    border-radius: 10px;
-    border: 1px solid #d1d5db;
-    font-size: 0.95rem;
-
-    outline: none;
-    transition: all 0.25s ease;
+  width: 100%;
+  padding: 11px 14px;
+  margin-bottom: 12px;
+  border-radius: 10px;
+  border: 1.5px solid #e2e8f0;
+  background: #f8fafc;
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 0.9rem;
+  color: #0f172a;
+  outline: none;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
 }
 
-/* Focus effect */
-.email-input:focus,
-.city-input:focus,
-.message-input:focus {
-    border-color: #2563eb;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
-}
-
-/* Placeholder */
 .email-input::placeholder,
 .city-input::placeholder,
 .message-input::placeholder {
-    color: #9ca3af;
+  color: #b0b9c8;
 }
 
-/* ------------------------------
-   SUBMIT BUTTON
---------------------------------*/
+.email-input:focus,
+.city-input:focus,
+.message-input:focus {
+  background: #ffffff;
+  border-color: #3b5bdb;
+  box-shadow: 0 0 0 3px rgba(59, 91, 219, 0.12);
+}
+
+/* ── Submit button ── */
 .submit-button {
-    margin-top: 10px;
-    padding: 12px 0;
-
-    background-color: #2563eb;
-    color: #ffffff;
-    border: none;
-    border-radius: 12px;
-
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-
-    transition: all 0.25s ease;
+  margin-top: 8px;
+  padding: 12px 0;
+  background: #3b5bdb;
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 0.9rem;
+  font-weight: 650;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(59, 91, 219, 0.25);
+  transition: background 0.18s ease, box-shadow 0.18s ease, transform 0.15s ease;
 }
 
 .submit-button:hover {
-    background-color: #1d4ed8;
-    transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(37, 99, 235, 0.25);
+  background: #2f4ac4;
+  box-shadow: 0 6px 18px rgba(59, 91, 219, 0.35);
+  transform: translateY(-1px);
 }
 
-/* Disabled / Sending state */
+.submit-button:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
 .submit-button:disabled {
-    background-color: #93c5fd;
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
+  background: #93c5fd;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
-/* ------------------------------
-   RESPONSIVE
---------------------------------*/
+/* ── Responsive ── */
 @media (max-width: 600px) {
-    .contact-container {
-        margin: 40px 16px;
-        padding: 32px 24px;
-    }
+  .contact-container {
+    margin: 48px 16px 60px;
+    padding: 32px 24px 28px;
+    border-radius: 20px;
+  }
 
-    .contact-container h2 {
-        font-size: 1.7rem;
-    }
+  .contact-container h2 {
+    font-size: 1.7rem;
+  }
+
+  .contact-container h3 {
+    font-size: 0.875rem;
+    margin-bottom: 24px;
+  }
 }

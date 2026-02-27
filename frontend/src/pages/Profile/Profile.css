@@ -1,92 +1,140 @@
-/* Page wrapper below header */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap');
+
+/* ── Page wrapper ── */
 .user {
-    max-width: 560px;
-    margin: 96px auto 0;
-    padding: 32px;
-    background: #ffffff;
-    border-radius: 20px;
-    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.08);
-    font-family: "Inter", sans-serif;
+  max-width: 520px;
+  margin: 80px auto 0;
+  padding: 36px;
+  background: #ffffff;
+  border-radius: 24px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.04), 0 16px 48px rgba(0,0,0,0.08);
+  border: 1px solid #f1f5f9;
+  font-family: 'DM Sans', system-ui, sans-serif;
 }
 
-/* Section title */
+/* ── Header ── */
 .user h2 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #111827;
-    margin-bottom: 24px;
-    border-bottom: 1px solid #e5e7eb;
-    padding-bottom: 12px;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 28px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f1f5f9;
+  letter-spacing: -0.3px;
 }
 
-/* Name highlight */
+/* ── Name row ── */
 .user h3 {
-    font-size: 1.25rem;
-    font-weight: 500;
-    color: #1f2937;
-    margin-bottom: 18px;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 20px;
+  letter-spacing: -0.4px;
 }
 
-/* Info text */
+/* ── Info rows ── */
 .user-email,
 .user-city,
 .join-date {
-    font-size: 0.95rem;
-    color: #4b5563;
-    margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9rem;
+  color: #475569;
+  margin-bottom: 10px;
+  padding: 11px 14px;
+  background: #f8fafc;
+  border-radius: 10px;
+  border: 1px solid #f1f5f9;
+  transition: background 0.15s ease;
 }
 
-/* Joined date subtle */
+.user-email:hover,
+.user-city:hover {
+  background: #f1f5f9;
+}
+
+/* ── Joined date ── */
 .join-date {
-    font-size: 0.85rem;
-    color: #9ca3af;
-    margin-top: 16px;
+  font-size: 0.82rem;
+  color: #94a3b8;
+  margin-top: 4px;
+  background: transparent;
+  border-color: transparent;
+  padding-left: 4px;
 }
 
-/* Update profile link */
+.join-date:hover {
+  background: transparent;
+}
+
+/* ── Update link ── */
 .update-user {
-    margin-top: 20px;
-    font-size: 0.95rem;
-    font-weight: 500;
-    color: #4f46e5;
-    cursor: pointer;
-    display: inline-block;
-    transition: color 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 20px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #3b5bdb;
+  cursor: pointer;
+  padding: 8px 0;
+  transition: color 0.18s ease, gap 0.18s ease;
+  text-decoration: none;
+}
+
+.update-user a {
+  color: inherit;
+  text-decoration: none;
 }
 
 .update-user:hover {
-    color: #4338ca;
-    text-decoration: underline;
+  color: #2f4ac4;
+  gap: 10px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
-/* Sign out button */
+/* ── Sign out button ── */
 .sign-out {
-    width: 100%;
-    margin-top: 28px;
-    padding: 12px;
-    border-radius: 14px;
-    border: none;
-    font-size: 1rem;
-    font-weight: 500;
-    background: #ef4444;
-    color: white;
-    cursor: pointer;
-    transition: all 0.2s ease;
+  width: 100%;
+  margin-top: 24px;
+  padding: 12px;
+  border-radius: 12px;
+  border: none;
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  background: #fff1f2;
+  color: #e03131;
+  cursor: pointer;
+  border: 1.5px solid #fecdd3;
+  transition: all 0.18s ease;
+  letter-spacing: 0.01em;
 }
 
 .sign-out:hover {
-    background: #dc2626;
-    transform: translateY(-1px);
+  background: #e03131;
+  color: #ffffff;
+  border-color: #e03131;
+  box-shadow: 0 4px 14px rgba(224, 49, 49, 0.3);
+  transform: translateY(-1px);
 }
 
 .sign-out:active {
-    transform: translateY(0);
+  transform: translateY(0);
+  box-shadow: none;
 }
 
-/* Mobile responsive */
+/* ── Mobile ── */
 @media (max-width: 600px) {
-    .user {
-        margin: 80px 16px 0;
-        padding: 24px;
-    }
+  .user {
+    margin: 72px 16px 0;
+    padding: 24px 20px;
+    border-radius: 20px;
+  }
+
+  .user h3 {
+    font-size: 1.3rem;
+  }
 }

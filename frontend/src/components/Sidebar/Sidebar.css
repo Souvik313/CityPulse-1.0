@@ -1,81 +1,111 @@
-/* ------------------------------
-   SIDEBAR CONTAINER
---------------------------------*/
+/* ── Sidebar container ── */
 .sidebar {
-    position: fixed;
-    top: 64px;
-    left: 0;
-    width: 200px;
-    height: calc(100vh - 64px);
-    background-color: #ffffff;
-    box-shadow: 2px 0 12px rgba(0, 0, 0, 0.08);
-    padding: 20px 0;
-    z-index: 999;
-
-    transform: translateX(-100%);
-    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    will-change: transform;
+  position: fixed;
+  top: 64px;
+  left: 0;
+  width: 220px;
+  height: calc(100vh - 64px);
+  background: #ffffff;
+  border-right: 1px solid #f1f5f9;
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.06);
+  padding: 16px 10px;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(-100%);
+  transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.28s ease;
+  will-change: transform;
 }
 
 .sidebar.open {
-    transform: translateX(0);
+  transform: translateX(0);
+  box-shadow: 4px 0 32px rgba(0, 0, 0, 0.1);
 }
 
-/* ------------------------------
-   SLIDE ANIMATION
---------------------------------*/
-@keyframes slideIn {
-    from {
-        transform: translateX(-100%);
-        opacity: 0;
-    }
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
-}
-
-/* ------------------------------
-   LIST
---------------------------------*/
+/* ── List ── */
 .sidebar ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
-/* ------------------------------
-   LIST ITEMS
---------------------------------*/
+/* ── List items ── */
 .sidebar li {
-    padding: 14px 24px;
-    font-size: 15px;
-    font-weight: 500;
-    color: #1f2937;
-    cursor: pointer;
-    transition: background-color 0.2s ease, color 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #64748b;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: background 0.16s ease, color 0.16s ease, transform 0.15s ease;
+  letter-spacing: 0.01em;
+  user-select: none;
 }
 
-/* hover effect */
 .sidebar li:hover {
-    background-color: #f1f5ff;
-    color: #2563eb;
+  background: #f1f5ff;
+  color: #3b5bdb;
+  transform: translateX(2px);
 }
 
-/* ------------------------------
-   ACTIVE ITEM (OPTIONAL)
---------------------------------*/
+/* ── Active item ── */
 .sidebar li.active {
-    background-color: #e0e7ff;
-    color: #1d4ed8;
-    border-left: 4px solid #2563eb;
+  background: #eef1ff;
+  color: #3b5bdb;
+  font-weight: 600;
+  border-left: 3px solid #3b5bdb;
+  padding-left: 11px;
 }
 
-/* ------------------------------
-   MOBILE FULL HEIGHT
---------------------------------*/
+/* ── Divider (optional — between groups) ── */
+.sidebar-divider {
+  height: 1px;
+  background: #f1f5f9;
+  margin: 8px 4px;
+}
+
+/* ── Dark mode ── */
+html.dark .sidebar {
+  background: #16161f;
+  border-right-color: #242433;
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.4);
+}
+
+html.dark .sidebar.open {
+  box-shadow: 4px 0 32px rgba(0, 0, 0, 0.6);
+}
+
+html.dark .sidebar li {
+  color: #6b6b88;
+}
+
+html.dark .sidebar li:hover {
+  background: #1a1f3a;
+  color: #6b8cff;
+}
+
+html.dark .sidebar li.active {
+  background: #1a1f3a;
+  color: #6b8cff;
+  border-left-color: #6b8cff;
+}
+
+html.dark .sidebar-divider {
+  background: #242433;
+}
+
+/* ── Mobile ── */
 @media (max-width: 480px) {
-    .sidebar {
-        width: 220px;
-    }
+  .sidebar {
+    width: 200px;
+    padding: 12px 8px;
+  }
 }
