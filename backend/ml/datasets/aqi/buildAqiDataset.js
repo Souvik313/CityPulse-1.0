@@ -4,14 +4,14 @@ import { fileURLToPath } from 'url';
 import { dirname, resolve } from 'path';
 import path from 'path';
 import fs from 'fs';
-import AQIData from '../../models/AQI.model.js';
+import AQIData from '../../../models/AQI.model.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 // Load environment variables
-console.log('Loading .env from:', path.join(__dirname, '..', '..', '.env.development.local'));
-dotenv.config({ path: path.join(__dirname, '..', '..', '.env.development.local') });
+console.log('Loading .env from:', path.join(__dirname, '..', '..', '..', '.env.development.local'));
+dotenv.config({ path: path.join(__dirname, '..', '..', '..', '.env.development.local') });
 console.log('DB_URI loaded:', process.env.DB_URI ? 'YES' : 'NO');
 
 const { DB_URI } = process.env;

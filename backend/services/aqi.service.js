@@ -1,5 +1,39 @@
 import axios from "axios";
 import AppError from "../utils/AppError.js";
+import AQIData from "../models/AQI.model.js";
+import City from "../models/city.model.js";
+import DataSource from "../models/dataSource.model.js";
+
+export const fetchAndStoreAQIForCity = async (cityName) => {
+  const cityDoc = await City.findOne({
+    name: { $regex: new RegExp(`^${cityName}$`, "i") }
+  });
+
+  if (!cityDoc) throw new AppError(`City not found: ${cityName}`, 404);
+
+  const aqi = await fetchLiveAQI({ city: cityDoc.name });
+
+  let dataSource = await DataSource.findOne({ name: /waqi/i });
+  if (!dataSource) {
+    dataSource = await DataSource.create({
+      name: "WAQI API",
+      type: "api",
+      reliabilityScore: 8,
+      lastFetchedAt: new Date()
+    });
+  }
+
+  await AQIData.create({
+    city: cityDoc._id,
+    source: dataSource._id,
+    pollutants: aqi.pollutants,
+    dominantPollutant: aqi.dominantPollutant,
+    aqiValue: aqi.aqi,
+    category: aqi.category,
+    healthImpact: aqi.healthImpact || null,
+    recordedAt: new Date()
+  });
+};
 
 export const fetchLiveAQI = async ({ city }) => {
   try {
@@ -61,7 +95,6 @@ export const fetchLiveAQI = async ({ city }) => {
     throw new AppError("Failed to fetch live AQI data", 503);
   }
 };
-
 
 /**
  * Convert AQI value to human-readable category

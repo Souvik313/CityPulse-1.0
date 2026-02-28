@@ -1,6 +1,8 @@
 import axios from "axios";
 import AppError from "../utils/AppError.js";
-
+import WeatherData from "../models/WeatherData.model.js";
+import City from "../models/city.model.js";
+import DataSource from "../models/dataSource.model.js";
 /**
  * Fetch live weather data from OpenWeatherMap API
  * @param {Object} params
@@ -72,5 +74,49 @@ export const fetchLiveWeather = async ({ city, lat, lon }) => {
 
     throw new AppError("Failed to fetch live weather data", 503);
   }
+};
+
+export const fetchAndStoreWeatherForCity = async (cityName) => {
+  const cityDoc = await City.findOne({
+    name: { $regex: new RegExp(`^${cityName}$`, "i") }
+  });
+
+  if (!cityDoc) throw new AppError(`City not found: ${cityName}`, 404);
+
+  const weather = await fetchLiveWeather({
+    city: cityDoc.name,
+    lat: cityDoc.latitude,
+    lon: cityDoc.longitude
+  });
+
+  let dataSource = await DataSource.findOne({ name: "OpenWeatherMap api" });
+  if (!dataSource) {
+    dataSource = await DataSource.create({
+      name: "OpenWeatherMap api",
+      type: "api",
+      reliabilityScore: 9,
+      lastFetchedAt: new Date()
+    });
+  }
+
+  await WeatherData.create({
+    city: cityDoc._id,
+    source: dataSource._id,
+    temperature: weather.temperature,
+    feelsLike: weather.feelsLike ?? null,
+    humidity: weather.humidity ?? null,
+    pressure: weather.pressure ?? null,
+    wind: weather.windSpeed || weather.windDirection ? {
+      speed: weather.windSpeed ?? null,
+      direction: weather.windDirection ? String(weather.windDirection) : null
+    } : undefined,
+    condition: {
+      main: weather.conditionMain || "unknown",
+      description: weather.weatherCondition || "unknown"
+    },
+    visibility: weather.visibility ?? null,
+    cloudCover: weather.cloudCoverage ?? null,
+    recordedAt: new Date()
+  });
 };
 

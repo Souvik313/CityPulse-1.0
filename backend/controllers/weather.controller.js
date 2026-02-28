@@ -78,7 +78,7 @@ export const fetchAndStoreWeather = catchAsync(async (req, res, next) => {
     city: cityDoc._id,
     source: dataSource._id,
     temperature: weather.temperature,
-    feelsLiks: weather.feelsLike ?? null,
+    feelsLike: weather.feelsLike ?? null,
     humidity: weather.humidity ?? null,
     pressure: weather.pressure ?? null,
     wind: weather.windSpeed || weather.windDirection ? {

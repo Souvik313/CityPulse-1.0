@@ -14,6 +14,9 @@ import trafficRouter from './routes/traffic.routes.js';
 import sentimentRouter from './routes/sentiment.routes.js';
 import cityPulseRouter from './routes/citypulse.routes.js';
 import chatRouter from './routes/chat.routes.js';
+import './jobs/aqiPoller.js'; // Import the AQI poller to start it when the server runs
+import './jobs/weatherPoller.js'; // Import the Weather poller to start it when the server runs
+// import './jobs/trafficPoller.js';
 
 dotenv.config();
 const app = express();

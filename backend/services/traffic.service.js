@@ -49,8 +49,8 @@ const fetchFlowForPoint = async (lat, lon, API_KEY) => {
 
     return response.data.flowSegmentData;
   } catch (error) {
-    console.warn(`Traffic fetch failed at ${lat},${lon}`);
-    return null; // fail-safe
+    console.warn(`Traffic fetch failed at ${lat},${lon}:`, error.response?.data || error.message);
+    return null;
   }
 };
 
@@ -62,7 +62,7 @@ export const fetchLiveTraffic = async ({ city, lat, lon }) => {
     }
 
     /* STEP 1: Generate multiple points */
-    const points = generateSamplePoints(lat, lon, 4);
+    const points = generateSamplePoints(lat, lon, 2);
 
     const allFlows = [];
     const allHotspots = [];
